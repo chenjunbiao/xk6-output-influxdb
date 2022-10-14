@@ -1,11 +1,11 @@
 name: ci
 on:
-  workflow_dispatch: #github页面手动触发
+  workflow_dispatch:
   push:
     tags:
       - "v*.*"
 env:
-  IMAGE_NAME: xk6-output-influxdb #这是您的镜像名
+  IMAGE_NAME: xk6-output-influxdb
 jobs:
   get-tags:
     runs-on: ubuntu-20.04
@@ -22,8 +22,9 @@ jobs:
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
           fi
-          echo ::set-output name=tags::${VERSION}          
+          echo ::set-output name=tags::${VERSION}         
   push-ghcr:
+    needs: get-tags
     runs-on: ubuntu-20.04
     env:
       TZ: Asia/Shanghai
